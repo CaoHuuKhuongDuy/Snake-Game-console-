@@ -72,7 +72,7 @@ void grown_snake(snake_t *snake);
 
 void update_snake_direction(snake_t *snake, enum Snake_Direction direction);
 void update_snake_position(snake_t *snake);
-bool update_snake_in_board(int* cells, int width, int height, snake_t* snake_p, int snake_grows);
+bool update_snake_in_board(int* cells, int width, int height, snake_t* snake_p, int snake_grows, bool init);
 
 void set_seed(unsigned seed);
 unsigned generate_index(unsigned size);

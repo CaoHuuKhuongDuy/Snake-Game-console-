@@ -104,45 +104,54 @@ void update_snake_position(snake_t *snake) {
     }
 }
 
-bool update_snake_in_board(int* cells, int width, int height, snake_t* snake_p, int snake_grows) {
+bool update_snake_in_board(int* cells, int width, int height, snake_t* snake_p, int snake_grows, bool init) {
     node_t *curr_pos = snake_p->head_pos;
     bool more_food = false;
+    Position *pos = (Position*)curr_pos->data;
+    if (pos->x < 0 || pos->x >= width || pos->y < 0 || pos->y >= height) {
+        g_game_over = 1;
+        return more_food;
+    }
+    int id = get_id_cell(*pos, width);
+    if (cells[id] == FLAG_FOOD) {
+        g_score++;
+        if (snake_grows) grown_snake(snake_p);
+        more_food = true;
+    }
+    // if (more_food && snake_grows) return more_food;
+    // if (init) return more_food;
+    if (*((enum Snake_Direction*)snake_p->head_direction->data) != NONE && cells[id] == FLAG_WALL) {
+        g_game_over = 1;
+        return more_food;
+    }
+    if ((!more_food || !snake_grows) && !init) {
+        Position last_cell = *((Position*)snake_p->tail_pos->data);
+        enum Snake_Direction last_direction = *((enum Snake_Direction*)snake_p->tail_direction->data);
+        if (last_direction == UP) {
+            last_cell.y++;
+        } else if (last_direction == DOWN) {
+            last_cell.y--;
+        } else if (last_direction == LEFT) {
+            last_cell.x++;
+        } else if (last_direction == RIGHT) {
+            last_cell.x--;
+        }
+        id = get_id_cell(last_cell, width);
+        cells[id] = FLAG_PLAIN_CELL;
+    }
+    id = get_id_cell(*pos, width);
+    if (*((enum Snake_Direction*)snake_p->head_direction->data) != NONE && cells[id] == FLAG_SNAKE) {
+        g_game_over = 1;
+        return more_food;
+    }
+    
     while (curr_pos != NULL) {
-        Position *pos = (Position*)curr_pos->data;
-        if (pos->x < 0 || pos->x >= width || pos->y < 0 || pos->y >= height) {
-            g_game_over = 1;
-            return more_food;
-        }
-        int id = get_id_cell(*pos, width);
-        if (curr_pos == snake_p->head_pos && *((enum Snake_Direction*)snake_p->head_direction->data) != NONE 
-            && (cells[id] == FLAG_SNAKE || cells[id] == FLAG_WALL)) {
-            g_game_over = 1;
-            return more_food;
-        }
-        if (curr_pos == snake_p->head_pos && cells[id] == FLAG_FOOD) {
-            g_score++;
-            if (snake_grows) grown_snake(snake_p);
-            more_food = true;
-            // place_food(cells, width, height);
-        }
+        pos = (Position*)curr_pos->data;
+        id = get_id_cell(*pos, width);
         cells[id] = FLAG_SNAKE;
         curr_pos = curr_pos->next;
     }
-    if (more_food && snake_grows) return more_food;
-    Position last_cell = *((Position*)snake_p->tail_pos->data);
-    enum Snake_Direction last_direction = *((enum Snake_Direction*)snake_p->tail_direction->data);
-    if (last_direction == NONE) return more_food;
-    if (last_direction == UP) {
-        last_cell.y++;
-    } else if (last_direction == DOWN) {
-        last_cell.y--;
-    } else if (last_direction == LEFT) {
-        last_cell.x++;
-    } else if (last_direction == RIGHT) {
-        last_cell.x--;
-    }
-    int id = get_id_cell(last_cell, width);
-    cells[id] = FLAG_PLAIN_CELL;
+    
     return more_food;
 }
 

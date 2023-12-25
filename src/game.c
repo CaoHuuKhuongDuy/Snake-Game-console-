@@ -31,7 +31,7 @@ void update(int* cells, size_t width, size_t height, snake_t* snake_p,
     // height = 10
     update_snake_direction(snake_p, input);
     update_snake_position(snake_p);
-    bool more_food = update_snake_in_board(cells, width, height, snake_p, growing);
+    bool more_food = update_snake_in_board(cells, width, height, snake_p, growing, false);
     if (more_food) place_food(cells, width, height);
 }
 

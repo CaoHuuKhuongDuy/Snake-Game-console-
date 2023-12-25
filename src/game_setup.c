@@ -80,14 +80,16 @@ enum board_init_status initialize_game(int** cells_p, size_t* width_p,
     snake_p->head_direction = NULL;
     if (board_rep == NULL) {
         status = initialize_default_board(cells_p, width_p, height_p);
-        grown_snake_with_pos(snake_p, (Position){2, 2}, NONE);
+        grown_snake_with_pos(snake_p, (Position){2, 2}, RIGHT);
     }
     else {
         status = decompress_board_str(cells_p, width_p, height_p, snake_p, board_rep);
     }
     if (status != INIT_SUCCESS) return status;
-    update_snake_in_board(*cells_p, *width_p, *height_p, snake_p, 0);
+    update_snake_in_board(*cells_p, *width_p, *height_p, snake_p, 0, true);
     place_food(*cells_p, *width_p, *height_p);
+    // printf("game over:%d\n", g_game_over);
+    // while (true) {}
     return status;
 }
 
@@ -149,8 +151,8 @@ enum board_init_status decompress_board_str(int** cells_p, size_t* width_p,
                     cells[pos_cell++] = FLAG_PLAIN_CELL;
                 } else if (type == 'S') {
                     if (snake_p->head_direction != NULL) return INIT_ERR_WRONG_SNAKE_NUM;
-                    cells[pos_cell] = FLAG_SNAKE;
-                    grown_snake_with_pos(snake_p, (Position){pos_cell % *width_p, pos_cell / *width_p}, NONE);
+                    // cells[pos_cell] = FLAG_SNAKE;
+                    grown_snake_with_pos(snake_p, (Position){pos_cell % *width_p, pos_cell / *width_p}, RIGHT);
                     pos_cell++;
                 } else if (type == 'W') {
                     cells[pos_cell++] = FLAG_WALL;
@@ -159,6 +161,7 @@ enum board_init_status decompress_board_str(int** cells_p, size_t* width_p,
         }
         if (check_width != 0) return INIT_ERR_INCORRECT_DIMENSIONS;
     }
+    if (snake_p->head_direction == NULL) return INIT_ERR_WRONG_SNAKE_NUM;
     if (check_height != 0) return INIT_ERR_INCORRECT_DIMENSIONS;
     if (i != len) {
         // printf("i:%d, len:%d\n", i, len);
