@@ -73,6 +73,10 @@ int main(int argc, char** argv) {
 
     enum board_init_status status;
 
+    /*------------------TEST---------------------------*/
+    char board[200] = "B7x10|W10|W1E4W5|W2E7W1|W1E8W1|W1E4W1E3W1|W1E2S1E1W1E3W1|W10";
+    /*---------------------TEST--------------------------*/
+
     // initialize board from command line arguments
     switch (argc) {
         case (2):
@@ -99,6 +103,14 @@ int main(int argc, char** argv) {
             status = initialize_game(&cells, &width, &height, &snake, argv[2]);
             break;
         case (1):
+            status = initialize_game(&cells, &width, &height, &snake, board);
+            if (status != INIT_SUCCESS) {
+                printf("status:%d", status);
+                free(cells);
+                return 0;
+            }
+            break;
+            
         default:
             printf("usage: snake <GROWS: 0|1> [BOARD STRING]\n");
             return 0;
@@ -129,9 +141,10 @@ int main(int argc, char** argv) {
 
     initialize_window(width, height);
     // TODO: implement the game loop here (Part 1A)!
-    while (!g_game_over) {
-        enum input_key input = get_input();
-        update(cells, width, height, NULL, input, 0);
+    while (true) {
+        enum input_key input = get_input();;
+        update(cells, width, height, &snake, input, snake_grows);
+        if (g_game_over) break;
         render_game(cells, width, height);
         usleep(5e5);
     }
