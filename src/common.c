@@ -8,6 +8,14 @@
 int g_game_over;
 int g_score;
 
+// 1A
+int get_id_cell(Position pos, int width) {
+    return pos.x + pos.y * (int)width;
+}
+int snake_length;
+enum Snake_Direction snake_direction;
+Position snake_position;
+
 /** Sets the seed for random number generation.
  * Arguments:
  *  - `seed`: the seed.

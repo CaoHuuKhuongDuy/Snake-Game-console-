@@ -53,7 +53,9 @@ enum board_init_status initialize_default_board(int** cells_p, size_t* width_p,
 
     // Add snake
     cells[20 * 2 + 2] = FLAG_SNAKE;
-
+    snake_position = (Position){2, 2};
+    snake_length = 1;
+    snake_direction = RIGHT;
     return INIT_SUCCESS;
 }
 
@@ -74,7 +76,10 @@ enum board_init_status initialize_game(int** cells_p, size_t* width_p,
                                        char* board_rep) {
     // TODO: implement!
 
-    return INIT_SUCCESS;
+    enum board_init_status status = initialize_default_board(cells_p, width_p, height_p);
+    if (status != INIT_SUCCESS) return status;
+    place_food(*cells_p, *width_p, *height_p);
+    return status;
 }
 
 /** Takes in a string `compressed` and initializes values pointed to by

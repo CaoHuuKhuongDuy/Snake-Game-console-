@@ -27,7 +27,46 @@ void update(int* cells, size_t width, size_t height, snake_t* snake_p,
     // to the new position. If the snake eats food, the game score (`g_score`)
     // increases by 1. This function assumes that the board is surrounded by
     // walls, so it does not handle the case where a snake runs off the board.
-
+    // width = 20
+    // height = 10
+    Position next_position = snake_position;
+    enum Snake_Direction next_direction = snake_direction;
+    if (input == INPUT_UP) {
+        next_position.y -= 1;
+        next_direction = UP;
+    } else if (input == INPUT_DOWN) {
+        next_position.y += 1;
+        next_direction = DOWN;
+    } else if (input == INPUT_LEFT) {
+        next_position.x -= 1;
+        next_direction = LEFT;
+    } else if (input == INPUT_RIGHT) {
+        next_position.x += 1;
+        next_direction = RIGHT;
+    }
+    else {
+        if (next_direction == UP) {
+            next_position.y -= 1;
+        } else if (next_direction == DOWN) {
+            next_position.y += 1;
+        } else if (next_direction == LEFT) {
+            next_position.x -= 1;
+        } else if (next_direction == RIGHT) {
+            next_position.x += 1;
+        }
+    }
+    if (cells[get_id_cell(next_position, width)] == FLAG_WALL) {
+        g_game_over = 1;
+        return;
+    }
+    cells[get_id_cell(snake_position, width)] = FLAG_PLAIN_CELL;
+    snake_position = next_position;
+    snake_direction = next_direction;
+    if (cells[get_id_cell(snake_position, width)] == FLAG_FOOD) {
+        g_score++;
+        place_food(cells, width, height);
+    }
+    cells[get_id_cell(snake_position, width)] = FLAG_SNAKE;
     // TODO: implement!
 }
 
@@ -68,4 +107,5 @@ void read_name(char* write_into) {
  */
 void teardown(int* cells, snake_t* snake_p) {
     // TODO: implement!
+    free(cells);
 }

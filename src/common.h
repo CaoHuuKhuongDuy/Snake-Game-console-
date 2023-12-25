@@ -12,6 +12,19 @@
 #define FLAG_WALL 0b0100        // equals 4
 #define FLAG_FOOD 0b1000        // equals 8
 
+
+// part 1A
+typedef struct Position {
+    int x;
+    int y;
+} Position;
+int get_id_cell(Position pos, int width);
+enum Snake_Direction { UP, DOWN, LEFT, RIGHT};
+extern enum Snake_Direction snake_direction;
+extern int snake_length;
+extern Position snake_position;
+
+
 /**
  * Enumerated types, also known as "enums", are a way to create a set of named
  * constants! This enum represents the different possible inputs in our snake
