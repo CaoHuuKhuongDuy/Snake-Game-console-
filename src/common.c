@@ -11,6 +11,9 @@ int g_game_over = 0;
 int g_score;
 enum Snake_Direction back_direction[5] = {DOWN, UP, RIGHT, LEFT, NONE};
 
+int g_name_len;
+char g_name[1000];
+
 // 1A
 int get_id_cell(Position pos, int width) {
     return pos.x + pos.y * (int)width;

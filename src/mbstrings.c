@@ -1,5 +1,6 @@
 #include "mbstrings.h"
 
+
 /* mbslen - multi-byte string length
  * - Description: returns the number of UTF-8 code points ("characters")
  * in a multibyte string. If the argument is NULL or an invalid UTF-8
@@ -23,6 +24,31 @@
  * You will need bitwise operations for this part of the assignment!
  */
 size_t mbslen(const char* bytes) {
-    // TODO: implement!
-    return 0;
+    size_t len = 0;
+
+    while (*bytes != '\0') {
+        // Check the high bits of the current byte to determine if it's the start of a UTF-8 character
+        if ((*bytes & 0b10000000) == 0b00000000) {
+            // Single-byte character
+            len++;
+            bytes++;
+        } else if ((*bytes & 0b11100000) == 0b11000000) {
+            // Two-byte character
+            len++;
+            bytes += 2;
+        } else if ((*bytes & 0b11110000) == 0b11100000) {
+            // Three-byte character
+            len++;
+            bytes += 3;
+        } else if ((*bytes & 0b11111000) == 0b11110000) {
+            // Four-byte character
+            len++;
+            bytes += 4;
+        } else {
+            // Invalid or unsupported byte, skip to the next byte
+            bytes++;
+        }
+    }
+
+    return len;
 }

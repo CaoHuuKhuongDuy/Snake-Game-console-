@@ -60,7 +60,16 @@ void place_food(int* cells, size_t width, size_t height) {
 void read_name(char* write_into) {
     // TODO: implement! (remove the call to strcpy once you begin your
     // implementation)
-    strcpy(write_into, "placeholder");
+    // strcpy(write_into, "placeholder");
+    ssize_t bytes_read = 1;
+    do {
+        if (bytes_read <= 0) {
+            printf("Invalid name. Please try again.\n");
+        }
+        printf("Please enter your name: ");
+        fflush(stdout);
+        bytes_read = read(STDIN_FILENO, write_into, 1000);
+    } while (bytes_read <= 0);
 }
 
 /** Cleans up on game over — should free any allocated memory so that the

@@ -61,6 +61,11 @@ typedef struct snake {
     node_t *head_direction, *tail_direction;
 } snake_t;
 
+// Part 2B
+
+extern int g_name_len;
+extern char g_name[1000];
+
 void grown_snake_with_pos(snake_t *snake, Position pos, enum Snake_Direction direction);
 
 void grown_snake(snake_t *snake);

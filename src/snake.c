@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "game.h"
 #include "game_over.h"
@@ -45,13 +46,13 @@ void end_game(int* cells, size_t width, size_t height, snake_t* snake_p) {
     teardown(cells, snake_p);
 
     // ****************** UNCOMMENT THIS CODE IN PART 2B ***********************
-    /*
+    
     // Render final GAME OVER PRESS ANY KEY TO EXIT screen
     render_game_over(width, height);
     usleep(1000 * 1000);  // 1000ms
     cbreak(); // Leave halfdelay mode
     getch();
-    */
+    
 
     // tell ncurses that we're done
     endwin();
@@ -120,12 +121,23 @@ int main(int argc, char** argv) {
 
     // Check validity of the board before rendering!
     // TODO: Implement (in Part 1C)
-    // if ( ? board is not valid ? ) { return EXIT_FAILURE; }
+    if (status != INIT_SUCCESS) { 
+        end_game(cells, width, height, &snake);
+        return EXIT_FAILURE; 
+    }
 
     // Read in the player's name & save its name and length
     // TODO: Implement (in Part 2B)
-    // char name_buffer[1000];
-    // read_name(name_buffer);
+    char name_buffer[1000];
+    read_name(name_buffer);
+    // copy name_buffer to g_name(char array)
+    strcpy(g_name, name_buffer);
+    g_name_len = mbslen(name_buffer);
+    // printf("name_buffer: %s\n", name_buffer);
+    // printf("g_name: %s\n", g_name);
+    // printf("g_name_len: %d\n", g_name_len);
+    // end_game(cells, width, height, &snake);
+    // return 0;
     // ? save name_buffer ?
     // ? save mbslen(name_buffer) ?
 
