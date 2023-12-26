@@ -29,6 +29,7 @@ void update(int* cells, size_t width, size_t height, snake_t* snake_p,
     // walls, so it does not handle the case where a snake runs off the board.
     // width = 20
     // height = 10
+    if (g_game_over) return;
     update_snake_direction(snake_p, input);
     update_snake_position(snake_p);
     bool more_food = update_snake_in_board(cells, width, height, snake_p, growing, false);

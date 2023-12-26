@@ -74,11 +74,6 @@ int main(int argc, char** argv) {
 
     enum board_init_status status;
 
-    /*------------------TEST---------------------------*/
-    set_seed(0);
-    char board[200] = "B10x10|W10|W1E8W1|W3E6W1|W1E3S1E4W1|W1E8W1|W1E8W1|W1E5W4|W1E1W1E6W1|W1E1W1E6W1|W10";
-    /*---------------------TEST--------------------------*/
-
     // initialize board from command line arguments
     switch (argc) {
         case (2):
@@ -105,12 +100,6 @@ int main(int argc, char** argv) {
             status = initialize_game(&cells, &width, &height, &snake, argv[2]);
             break;
         case (1):
-            status = initialize_game(&cells, &width, &height, &snake, board);
-            // if (status != INIT_SUCCESS) {
-            //     printf("status:%d", status);
-            //     free(cells);
-            //     return 0;
-            // }
             break;
             
         default:
@@ -149,36 +138,12 @@ int main(int argc, char** argv) {
     //     "-=:___________/\n");
 
     initialize_window(width, height);
-    // TODO: implement the game loop here (Part 1A)!
-    // while (true) {
-    //     render_game(cells, width, height);
-    // }
-    
-    // end_game(cells, width, height, &snake);
-    // return 0;
-    // N N N N N N D L U R N
-    // N N N N N N D L U R N
-    // R N D N N N
-    // N N N N N N N N N N N D N L U R
-    int cnt = 6;
-    int l = 0;
-    // set_seed(22399895);
-    // render_game(cells, width, height);
-    // while (true) {}
-    enum input_key test[6] = {INPUT_RIGHT, INPUT_NONE, INPUT_DOWN, INPUT_NONE, INPUT_NONE, INPUT_NONE};
-    // enum input_key test[11] = {INPUT_NONE, INPUT_NONE, INPUT_NONE, INPUT_NONE, INPUT_NONE, INPUT_NONE, INPUT_DOWN, INPUT_LEFT, INPUT_UP, INPUT_RIGHT, INPUT_NONE};
-    // enum input_key test[16] = {INPUT_NONE, INPUT_NONE, INPUT_NONE, INPUT_NONE, INPUT_NONE, INPUT_NONE, INPUT_NONE, INPUT_NONE, INPUT_NONE, INPUT_NONE, INPUT_NONE, INPUT_DOWN, INPUT_NONE, INPUT_LEFT, INPUT_UP, INPUT_RIGHT};
-    // intt c
     while (!g_game_over) {
-        if (l == cnt) break;
         update(cells, width, height, &snake, test[l++], snake_grows);
-        // enum input_key input = get_input();
-        // update(cells, width, height, &snake, input, snake_grows);
-        // if (g_game_over) break;
+        enum input_key input = get_input();
+        update(cells, width, height, &snake, input, snake_grows);
         render_game(cells, width, height);
         usleep(1e6);
     }
-    // render_game(cells, width, height);
-    // while (true) {}
     end_game(cells, width, height, &snake);
 }
