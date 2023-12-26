@@ -75,6 +75,7 @@ int main(int argc, char** argv) {
     enum board_init_status status;
 
     /*------------------TEST---------------------------*/
+    set_seed(0);
     char board[200] = "B10x10|W10|W1E8W1|W3E6W1|W1E3S1E4W1|W1E8W1|W1E8W1|W1E5W4|W1E1W1E6W1|W1E1W1E6W1|W10";
     /*---------------------TEST--------------------------*/
 
@@ -134,11 +135,6 @@ int main(int argc, char** argv) {
     // copy name_buffer to g_name(char array)
     strcpy(g_name, name_buffer);
     g_name_len = mbslen(name_buffer);
-    // printf("name_buffer: %s\n", name_buffer);
-    // printf("g_name: %s\n", g_name);
-    // printf("g_name_len: %d\n", g_name_len);
-    // end_game(cells, width, height, &snake);
-    // return 0;
     // ? save name_buffer ?
     // ? save mbslen(name_buffer) ?
 
@@ -163,6 +159,7 @@ int main(int argc, char** argv) {
     // N N N N N N D L U R N
     // N N N N N N D L U R N
     // R N D N N N
+    // N N N N N N N N N N N D N L U R
     int cnt = 6;
     int l = 0;
     // set_seed(22399895);
@@ -170,12 +167,14 @@ int main(int argc, char** argv) {
     // while (true) {}
     enum input_key test[6] = {INPUT_RIGHT, INPUT_NONE, INPUT_DOWN, INPUT_NONE, INPUT_NONE, INPUT_NONE};
     // enum input_key test[11] = {INPUT_NONE, INPUT_NONE, INPUT_NONE, INPUT_NONE, INPUT_NONE, INPUT_NONE, INPUT_DOWN, INPUT_LEFT, INPUT_UP, INPUT_RIGHT, INPUT_NONE};
-    while (true) {
+    // enum input_key test[16] = {INPUT_NONE, INPUT_NONE, INPUT_NONE, INPUT_NONE, INPUT_NONE, INPUT_NONE, INPUT_NONE, INPUT_NONE, INPUT_NONE, INPUT_NONE, INPUT_NONE, INPUT_DOWN, INPUT_NONE, INPUT_LEFT, INPUT_UP, INPUT_RIGHT};
+    // intt c
+    while (!g_game_over) {
         if (l == cnt) break;
         update(cells, width, height, &snake, test[l++], snake_grows);
         // enum input_key input = get_input();
         // update(cells, width, height, &snake, input, snake_grows);
-        if (g_game_over) break;
+        // if (g_game_over) break;
         render_game(cells, width, height);
         usleep(1e6);
     }

@@ -62,14 +62,17 @@ void read_name(char* write_into) {
     // implementation)
     // strcpy(write_into, "placeholder");
     ssize_t bytes_read = 1;
+    int len = 1;
     do {
-        if (bytes_read <= 0) {
+        if (len == 0) {
             printf("Invalid name. Please try again.\n");
         }
         printf("Please enter your name: ");
         fflush(stdout);
         bytes_read = read(STDIN_FILENO, write_into, 1000);
-    } while (bytes_read <= 0);
+        len = mbslen(write_into);
+    } while (len == 0);
+     write_into[bytes_read] = '\0';
 }
 
 /** Cleans up on game over — should free any allocated memory so that the

@@ -124,6 +124,7 @@ bool update_snake_in_board(int* cells, int width, int height, snake_t* snake_p, 
         g_game_over = 1;
         return more_food;
     }
+    int save_plain_cell_id = -1;
     if ((!more_food || !snake_grows) && !init) {
         Position last_cell = *((Position*)snake_p->tail_pos->data);
         enum Snake_Direction last_direction = *((enum Snake_Direction*)snake_p->tail_direction->data);
@@ -137,13 +138,15 @@ bool update_snake_in_board(int* cells, int width, int height, snake_t* snake_p, 
             last_cell.x--;
         }
         id = get_id_cell(last_cell, width);
-        cells[id] = FLAG_PLAIN_CELL;
+        // cells[id] = FLAG_PLAIN_CELL;
+        save_plain_cell_id = id;
     }
     id = get_id_cell(*pos, width);
-    if (*((enum Snake_Direction*)snake_p->head_direction->data) != NONE && cells[id] == FLAG_SNAKE) {
+    if (*((enum Snake_Direction*)snake_p->head_direction->data) != NONE && cells[id] == FLAG_SNAKE && id != save_plain_cell_id) {
         g_game_over = 1;
         return more_food;
     }
+    if (save_plain_cell_id != -1) cells[save_plain_cell_id] = FLAG_PLAIN_CELL;
     
     while (curr_pos != NULL) {
         pos = (Position*)curr_pos->data;
